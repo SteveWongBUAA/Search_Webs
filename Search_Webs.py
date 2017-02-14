@@ -7,6 +7,8 @@ import webbrowser
 import ExtConfigParser
 import traceback
 from bs4 import BeautifulSoup
+import sys
+
 
 class Search_Webs(object):
 
@@ -20,11 +22,13 @@ class Search_Webs(object):
         # print data
         # print self.urls_concat,self.urls_append,self.urls_post,self.urls_post_keys
 
-    def search(self, key):
+    def search(self, key, encoding='utf8'):
         urls = []
         # input key is unicode should encode
         if type(key) == unicode:
-            key = key.encode('utf8')
+            key = key.encode(encoding)
+        elif type(key) == str:
+            key = key.decode(sys.stdin.encoding).encode(encoding)
         key = urllib.quote(key)
         for one in self.data:
             if one['method'] == 'concat':
@@ -83,7 +87,7 @@ class Search_Webs(object):
 if __name__ == '__main__':
     # Search_Webs().search("homeland")
     # Search_Webs().search("xzchkjq")
-    Search_Webs().search("你的名字")
+    Search_Webs().search("你的名字", encoding='gbk')
     #Search_Webs().getConf()
 
 

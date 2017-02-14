@@ -76,7 +76,6 @@ def argv_get():
             print argv_get.__doc__
             sys.exit()
         elif option in ("-P","--port"):
-#            global PORT
             Settings.PORT = parameter
             return 0
 
