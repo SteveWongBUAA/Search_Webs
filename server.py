@@ -3,56 +3,37 @@
 
 import tornado.ioloop
 import tornado.web
-import MySQLdb
+import tornado.httpclient
+import tornado.gen
 import json
-from Search_Webs import Search_Webs
+from Thread_Search import Thread_Search
 import os
 import sys
 import getopt
 
-class Database(object):
-    def __init__(self, dbName="smart_home"):
-        self.host = "127.0.0.1"
-        self.port = 3306
-        self.user = 'root'
-        self.passwd = '******'
-        self.dbName = dbName
 
-    def connect(self):
-        self.conn = MySQLdb.connect(host=self.host, user=self.user, passwd=self.passwd, db=self.dbName, port=self.port)
-        self.conn.set_character_set('utf8')
-        self.conn.autocommit(1)
-        print '\n# database connect!\n', self.conn
-        #$self.cursor = self.conn.cursor(cursorclass=MySQLdb.cursors.DictCursor)
-        self.cursor = self.conn.cursor(cursorclass=MySQLdb.cursors.DictCursor)
-
-    def getdata(self):
-	self.cursor.execute("select id, date_format(`updatetime`, '%Y-%m-%d %H:%i:%s')update_time, `key`, val from `smart_dev_1` order by updatetime desc")
-	ret = self.cursor.fetchall()
-	print ret
-	return ret
-
-    def adddata(self, k, v):
-	return self.cursor.execute("insert into `smart_dev_1`(`key`, `val`) values('%s', '%s')" % (k, v)) 
-
-    def disconnect(self):
-        self.conn.close()
-        print '\n# database close!\n'
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
-	self.render("index.html", urls_json=json.dumps({}), urls={}, open=0)
+        self.render("index.html", urls_json=json.dumps({}), urls={}, open=0, isPhone=True)
 
     def post(self):
-	key = self.get_argument('key')
-	urls = Search_Webs().search(key)
-	#urls = {'s':["baidu.com"]}
-	self.render('index.html', urls_json=json.dumps(urls), urls=urls, open=1)
+        headers = str(self.request.headers)
+        isPhone = False
+        if headers.find('iPhone') != -1 or headers.find('Android') != -1:
+            isPhone = True
+
+        headers, type(headers)
+        key = self.get_argument('key')
+        # urls = Search_Webs().search(key)
+        urls = Thread_Search().search(key)
+        #urls = {'s':["baidu.com"]}
+        self.render('index.html', urls_json=json.dumps(urls), urls=urls, open=1, isPhone=isPhone)
 
 class Settings(object):
     PORT = 11121 
     settings = {"template_path": os.path.join(os.path.dirname(__file__),"templates"),
-		"debug": True}
+                "debug": True}
 
 def argv_get():
     '''

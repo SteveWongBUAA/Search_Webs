@@ -28,14 +28,18 @@
 	Chrome: <a href="https://support.google.com/chrome/answer/95472?co=genie.platform%3ddesktop&hl=zh-hans">https://support.google.com/chrome/answer/95472?co=genie.platform%3ddesktop&hl=zh-hans</a>
 	<h1>Here are the urls:</h1>
 
+		{% if len(urls) == 0 %}
+		<h2>Sorry, no result found.</h2>
+		{% else %}
 	{% for url in urls %}
 		<p><a href="{{url}}">{{url}}</a></p>
 	{% end %}
+		{% end %}
 	</div>
 	{% end %}
      </form>
    </body>
-	{% if open == 1 %}
+	{% if isPhone == False and open == 1 %}
 	<script>window.onload = iopen(eval({% raw urls_json %}));</script>
 	{% end %}
  </html>
