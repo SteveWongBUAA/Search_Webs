@@ -1,0 +1,42 @@
+<html>
+   <head>
+      <title>PM Lee & movies</title>
+	<script>
+            function iopen(urls){
+                  for(var i=0;i<urls.length;i++){
+                        var command = urls[i];
+                        var vra=document.createElement('a');
+                        vra.target='_blank';
+                        vra.href=command;
+                        document.body.appendChild(vra);
+                        vra.click();
+                    }
+            }
+        </script>
+   </head>
+   <body>
+     <h1>PM Lee helps you find movies V1.0</h1>
+	<p>PM Lee: To achieve all the function, <a href="http://se.360.cn/">360 PC Browser</a> is recommeded.(Phone not supported)</p>
+     <form action="/" method="post">
+       <div>
+	movie: <input type="text" name="key" />
+       <input type="submit" value="search"/>
+      </div>
+	{% if open == 1 %}
+	<div>
+	<p>If your browser block the popup windows, please do some settings. Refer:</p>
+	Chrome: <a href="https://support.google.com/chrome/answer/95472?co=genie.platform%3ddesktop&hl=zh-hans">https://support.google.com/chrome/answer/95472?co=genie.platform%3ddesktop&hl=zh-hans</a>
+	<h1>Here are the urls:</h1>
+
+	{% for url in urls %}
+		<p><a href="{{url}}">{{url}}</a></p>
+	{% end %}
+	</div>
+	{% end %}
+     </form>
+   </body>
+	{% if open == 1 %}
+	<script>window.onload = iopen(eval({% raw urls_json %}));</script>
+	{% end %}
+ </html>
+
