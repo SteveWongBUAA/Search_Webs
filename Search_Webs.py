@@ -68,7 +68,6 @@ class Search_Webs(object):
             else:
                 url = ''
             has_res = self.has_res(url, hdr_more=one['hdr_more'], should_have_key=one['should_have_key'], key=one['key'])
-            # print url, key, has_res
             if has_res:
                 webbrowser.open(url)
                 urls.append(url)
