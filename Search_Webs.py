@@ -18,23 +18,25 @@ class Search_Webs(object):
     def getConf(self):
         cf = ExtConfigParser.ExtConfigParser()
         cf.read("./conf/urls.conf")
-        self.data = cf.getDict(['url', 'key', 'method', 'should_have_key', 'hdr_more'])
+        self.data = cf.getDict(['url', 'key', 'method', 'should_have_key', 'hdr_more', 'encoding'])
         # print data
         # print self.urls_concat,self.urls_append,self.urls_post,self.urls_post_keys
 
-    def search(self, key, encoding='utf8'):
+    def search(self, key):
         urls = []
         # input key is unicode should encode
-        if type(key) == unicode:
-            key = key.encode(encoding)
-        elif type(key) == str:
-            key = key.decode(sys.stdin.encoding).encode(encoding)
-        key = urllib.quote(key)
         for one in self.data:
+            if type(key) == unicode:
+                key_encode = key.encode(encoding=one['encoding'])
+            elif type(key) == str:
+                key_encode = key.decode(sys.stdin.encoding).encode(one['encoding'])
+            else:
+                key_encode = key
+            key_quote = urllib.quote(key_encode)
             if one['method'] == 'concat':
-                url = one['url'].replace('{#concat#}', key)
+                url = one['url'].replace('{#concat#}', key_quote)
             elif one['method'] == 'append':
-                url = one['url'] + key
+                url = one['url'] + key_quote
             else:
                 url = ''
             has_res = self.has_res(url, hdr_more=one['hdr_more'], should_have_key=one['should_have_key'], key=one['key'])
@@ -87,7 +89,7 @@ class Search_Webs(object):
 if __name__ == '__main__':
     # Search_Webs().search("homeland")
     # Search_Webs().search("xzchkjq")
-    Search_Webs().search("你的名字", encoding='gbk')
+    Search_Webs().search("你的名字")
     #Search_Webs().getConf()
 
 
