@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import time, threading
-from Search_Webs import Search_Webs
+from Request import Search_Webs
 import urllib, urllib2
 from bs4 import BeautifulSoup
 import traceback

@@ -16,15 +16,24 @@ class ExtConfigParser(ConfigParser):
         return list(filter(None, (x.strip() for x in value.splitlines())))
 
     def getDict(self, sections):
-        res = []
-        # s = 'urls'
+        """
+        以sections[0]的id为准，sections中所有元素的信息，返回字典
+        :param sections:
+        :return:
+        """
+        res = {}
+        for id in self.options(sections[0]):
+            res[int(id)] = {}
+        # print res
         for s in sections:
-            # o = '1'
+            # print s
+            # s = 'url' ...
             for o in self.options(s):
-                v = self.get(s, o)
-                #print len(res), int(o)
-                if len(res) == int(o):
-                    res.append({s: v})
-                else:
-                    res[int(o)][s] = v
+                # print o
+                # o = '0', '1', ...
+                if int(o) in res:
+                    res[int(o)][s] = self.get(s, o)
         return res
+
+
+

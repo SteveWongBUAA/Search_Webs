@@ -6,7 +6,7 @@ from datetime import timedelta
 from tornado import httpclient, gen, ioloop, queues
 import traceback
 from ExtConfigParser import ExtConfigParser
-from Search_Webs import Search_Webs
+from Request import Search_Webs
 
 class AsySpider(object):
     """A simple class of asynchronous spider."""
