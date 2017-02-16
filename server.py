@@ -26,7 +26,7 @@ class MainHandler(tornado.web.RequestHandler):
         headers, type(headers)
         key = self.get_argument('key')
         # urls = Search_Webs().search(key)
-        urls = Thread_Search().search(key)
+        urls = Thread_Search(key).search(20)
         #urls = {'s':["baidu.com"]}
         self.render('index.html', urls_json=json.dumps(urls), urls=urls, open=1, isPhone=isPhone)
 
